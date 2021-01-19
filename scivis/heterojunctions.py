@@ -14,8 +14,8 @@ def show_edges(data):
     for j, item in enumerate(edges):
         print(j)
         if j != 0:
-            plt.plot([cursor, cursor + step], [0, 0], 'w')
             cursor += step
+
         plt.plot([cursor, cursor + step], [item['ev1'], item['ev1']], '#F39C12', linewidth=5.0)
         plt.plot([cursor, cursor + step], [item['ec1'], item['ec1']], '#3498DB', linewidth=5.0)
         plt.plot([cursor + step, cursor + 2 * step], [item['ev2'], item['ev2']], '#F39C12', linewidth=5.0)
@@ -44,12 +44,13 @@ def show_edges(data):
     plt.show()
 
 
-edges= [{'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.5, 'ec2': 1.5},
-        {'ev1': -1.0, 'ec1': 2.0, 'ev2': 0.0, 'ec2': 1.0},
-        {'ev1': 2.0, 'ec1': 3.0, 'ev2': 1.0, 'ec2': 3.0},
-        {'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.0, 'ec2': 1.0},
-        ]
+if __name__ == '__main__':
 
-show_edges(edges)
+    edges= [{'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.5, 'ec2': 1.5},
+            {'ev1': -1.0, 'ec1': 2.0, 'ev2': 0.0, 'ec2': 1.0},
+            {'ev1': 2.0, 'ec1': 3.0, 'ev2': 1.0, 'ec2': 3.0},
+            {'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.0, 'ec2': 1.0},
+            ]
 
-print(edges)
+    show_edges(edges)
+
