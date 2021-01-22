@@ -1,6 +1,6 @@
 # scivis
 
-This is a colelction of Python modules for scientific visualizations. The modules has following functionalities:
+A collelction of Python modules for several specific tasks in scientific visualization. The modules have following functionalities:
 
 1. Plot band edges of heterojunctions. 
 
