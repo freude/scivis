@@ -44,7 +44,7 @@ def show_edges(data,
         List of labels for the x-axis denoting heterojunctions.
     """
 
-    num_of_struct = len(edges)
+    num_of_struct = len(data)
     step = width
     cursor = 0
     coords = []
@@ -55,27 +55,38 @@ def show_edges(data,
     if len(ticks) == 0:
         ticks = np.arange(num_of_struct)
 
-    for j, item in enumerate(edges):
+    for j, item in enumerate(data):
         print(j)
         if j != 0:
             cursor += spacing
 
-        plt.plot([cursor, cursor + step],
-                 [item['ev1'], item['ev1']], colors[0], linewidth=lw)
-        plt.plot([cursor, cursor + step],
-                 [item['ec1'], item['ec1']], colors[1], linewidth=lw)
-        plt.plot([cursor + step, cursor + 2 * step],
-                 [item['ev2'], item['ev2']], colors[0], linewidth=lw)
-        plt.plot([cursor + step, cursor + 2 * step],
-                 [item['ec2'], item['ec2']], colors[1], linewidth=lw)
+        if 'ev1' in item.keys() and 'ev2' in item.keys():
+            plt.plot([cursor, cursor + step],
+                     [item['ev1'], item['ev1']], colors[0], linewidth=lw)
+            plt.plot([cursor + step, cursor + 2 * step],
+                     [item['ev2'], item['ev2']], colors[0], linewidth=lw)
+            vb = item['ev2'] - item['ev1']
+            plt.plot([cursor + step, cursor + step],
+                     [item['ev1'], item['ev1'] + vb], colors[0], linewidth=2.0)
 
-        cb = item['ec2'] - item['ec1']
-        vb = item['ev2'] - item['ev1']
+        if 'ec1' in item.keys() and 'ec2' in item.keys():
+            plt.plot([cursor, cursor + step],
+                     [item['ec1'], item['ec1']], colors[1], linewidth=lw)
+            plt.plot([cursor + step, cursor + 2 * step],
+                     [item['ec2'], item['ec2']], colors[1], linewidth=lw)
+            cb = item['ec2'] - item['ec1']
+            plt.plot([cursor + step, cursor + step],
+                     [item['ec1'], item['ec1'] + cb], colors[1], linewidth=2.0)
 
-        plt.plot([cursor + step, cursor + step],
-                 [item['ec1'], item['ec1'] + cb], colors[1], linewidth=2.0)
-        plt.plot([cursor + step, cursor + step],
-                 [item['ev1'], item['ev1'] + vb], colors[0], linewidth=2.0)
+        if 'vac1' in item.keys() and 'vac2' in item.keys():
+            diff = item['vac2'] - item['vac1']
+            plt.plot([cursor, cursor + step],
+                     [item['vac1'], item['vac1']], 'k', linewidth=2.0)
+            plt.plot([cursor + step, cursor + 2 * step],
+                     [item['vac2'], item['vac2']], 'k', linewidth=2.0)
+            plt.plot([cursor + step, cursor + step],
+                     [item['vac1'], item['vac1'] + diff], 'k', linewidth=2.0)
+
 
         if show_labels:
             plt.text(cursor + 1, item['ev1'] + 0.1, str(item['ev1']))
@@ -92,15 +103,24 @@ def show_edges(data,
     # ax.spines['bottom'].set_visible(False)
     plt.xticks(coords, ticks)
     plt.ylabel('Energy (eV)')
-    plt.show()
+
+    return ax
 
 
 if __name__ == '__main__':
 
-    edges = [{'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.5, 'ec2': 1.5},
-             {'ev1': -1.0, 'ec1': 2.0, 'ev2': 0.0, 'ec2': 1.0},
-             {'ev1': 2.0, 'ec1': 3.0, 'ev2': 1.0, 'ec2': 3.0},
-             {'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.0, 'ec2': 1.0},
-             ]
+    # edges = [{'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.5, 'ec2': 1.5},
+    #          {'ev1': -1.0, 'ec1': 2.0, 'ev2': 0.0, 'ec2': 1.0},
+    #          {'ev1': 2.0, 'ec1': 3.0, 'ev2': 1.0, 'ec2': 3.0},
+    #          {'ev1': 0.0, 'ec1': 1.0, 'ev2': 0.0, 'ec2': 1.0},
+    #          ]
+    #
+    # show_edges(edges)
 
-    show_edges(edges)
+    edges = [{'ev1': 0.0, 'ec1': 1.0, 'vac1': 2.0, 'ev2': 0.5, 'ec2': 1.5, 'vac2': 2.0},]
+    edges1 = [{'ev1': 0.1, 'ec1': 0.3, 'vac1': 1.9, 'ev2': 0.2, 'ec2': 1.7, 'vac2': 2.2}, ]
+
+    fig, ax = plt.subplots(figsize=(3, 5))
+    ax = show_edges(edges, ax=ax)
+    # ax = show_edges(edges1, ax=ax)
+    plt.show()
